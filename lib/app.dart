@@ -14,27 +14,26 @@ class _TaskManagerAppState extends State<TaskManagerApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        textTheme: const TextTheme(),
-        inputDecorationTheme: _inputDecorationTheme(),
-        elevatedButtonTheme: _elevatedButtonThemeData()
-      ),
+          // useMaterial3: true,
+          colorSchemeSeed: AppColors.themeColor,
+          textTheme: const TextTheme(),
+          inputDecorationTheme: _inputDecorationTheme(),
+          elevatedButtonTheme: _elevatedButtonThemeData()),
       home: const SplashScreen(),
     );
   }
-ElevatedButtonThemeData _elevatedButtonThemeData(){
+
+  ElevatedButtonThemeData _elevatedButtonThemeData() {
     return ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.themeColor,
           foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(
-              vertical: 10.0, horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           fixedSize: const Size.fromWidth(double.maxFinite),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0)
-          )
-      ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))),
     );
-}
+  }
 
   InputDecorationTheme _inputDecorationTheme() {
     return InputDecorationTheme(

@@ -1,17 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:task_manager_app/ui/screens/sign_up_screen.dart';
 import 'package:task_manager_app/ui/utils/app_colors.dart';
 import 'package:task_manager_app/ui/widgets/screen_background.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
@@ -27,24 +26,17 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 const SizedBox(height: 82),
                 Text(
-                  "Get Started With",
+                  "Join With Us",
                   style: textTheme.displaySmall
                       ?.copyWith(fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 24),
-                _buildSignInForm(),
+                _buildSignUpForm(),
                 const SizedBox(height: 24),
                 Center(
                   child: Column(
                     children: [
-                      TextButton(
-                        onPressed: _onTapForgotPasswordButton,
-                        child: const Text(
-                          "Forgot Password!",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                      _buildSignUpSection(),
+                      _buildHaveAccountSection(),
                     ],
                   ),
                 ),
@@ -56,7 +48,7 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Widget _buildSignUpSection() {
+  Widget _buildHaveAccountSection() {
     return RichText(
       text: TextSpan(
         style: const TextStyle(
@@ -64,25 +56,37 @@ class _SignInScreenState extends State<SignInScreen> {
           fontSize: 14,
           letterSpacing: 0.5,
         ),
-        text: "Don't have an account? ",
+        text: "Have account? ",
         children: [
           TextSpan(
-            text: "Sign Up",
+            text: "Sign In",
             style: const TextStyle(
               color: AppColors.themeColor,
             ),
-            recognizer: TapGestureRecognizer()..onTap = _onTapSignUp,
+            recognizer: TapGestureRecognizer()..onTap = _onTapSignIn,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSignInForm() {
+  Widget _buildSignUpForm() {
     return Column(
       children: [
         const TextField(
           decoration: InputDecoration(hintText: "Email"),
+        ),
+        const SizedBox(height: 8.0),
+        const TextField(
+          decoration: InputDecoration(hintText: "First Name"),
+        ),
+        const SizedBox(height: 8.0),
+        const TextField(
+          decoration: InputDecoration(hintText: "Last Name"),
+        ),
+        const SizedBox(height: 8.0),
+        const TextField(
+          decoration: InputDecoration(hintText: "Mobile"),
         ),
         const SizedBox(height: 8.0),
         const TextField(
@@ -101,16 +105,7 @@ class _SignInScreenState extends State<SignInScreen> {
     // TODO: implement on tap next button
   }
 
-  void _onTapForgotPasswordButton() {
-    // TODO: implement on tap forgot password
-  }
-
-  void _onTapSignUp() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SignUpScreen(),
-      ),
-    );
+  void _onTapSignIn() {
+    Navigator.pop(context);
   }
 }
