@@ -41,7 +41,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       TextButton(
                         onPressed: _onTapForgotPasswordButton,
                         child: const Text(
-                          "Forgot Password!",
+                          "Forgot Password?",
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),
