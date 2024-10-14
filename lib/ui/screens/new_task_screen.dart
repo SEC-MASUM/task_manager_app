@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager_app/ui/screens/add_new_task_screen.dart';
+import 'package:task_manager_app/ui/utils/app_colors.dart';
+import 'package:task_manager_app/ui/widgets/task_card.dart';
 import 'package:task_manager_app/ui/widgets/task_summary_card.dart';
 
 class NewTaskScreen extends StatefulWidget {
@@ -14,7 +16,19 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [_buildSummarySection()],
+        children: [
+          _buildSummarySection(),
+          Expanded(
+            child: ListView.separated(
+                itemBuilder: (context, index) {
+                  return const TaskCard();
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: 8);
+                },
+                itemCount: 10),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _onTapAddFAB,
