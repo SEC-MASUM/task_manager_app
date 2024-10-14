@@ -59,7 +59,7 @@ class _TaskCardState extends State<TaskCard> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Edit Status"),
+            title: const Text("Edit Status"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: ["New", "Completed", "Cancelled", "Progress"].map((e) {
@@ -73,14 +73,16 @@ class _TaskCardState extends State<TaskCard> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text("Cancle")),
-              TextButton(onPressed: () {}, child: Text("Ok")),
+                  child: const Text("Cancel")),
+              TextButton(onPressed: () {}, child: const Text("Ok")),
             ],
           );
         });
   }
 
-  void _onTapDeleteButton() {}
+  void _onTapDeleteButton() {
+    // TODO: Implement Delete Functionality
+  }
 
   Widget _buildTaskStatusChip() {
     return Chip(
