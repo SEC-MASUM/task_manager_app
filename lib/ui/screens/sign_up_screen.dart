@@ -176,7 +176,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       "firstName": _firstNameTEController.text.trim(),
       "lastName": _lastNameTEController.text.trim(),
       "mobile": _mobileTEController.text.trim(),
-      "password": _passwordTEController.text.trim(),
+      "password": _passwordTEController.text,
       "photo": "",
     };
 
@@ -188,10 +188,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _inProgress = false;
     });
     if (response.isSuccess) {
+      _clearTextFields();
       showSnackBarMessage(context, "New user created");
     } else {
       showSnackBarMessage(context, response.errorMessage, true);
     }
+  }
+
+  void _clearTextFields() {
+    _emailTEController.clear();
+    _firstNameTEController.clear();
+    _lastNameTEController.clear();
+    _mobileTEController.clear();
+    _passwordTEController.clear();
   }
 
   void _onTapSignIn() {
