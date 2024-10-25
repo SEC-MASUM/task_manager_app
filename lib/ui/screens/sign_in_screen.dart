@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager_app/data/models/network_response.dart';
+import 'package:task_manager_app/data/services/network_caller.dart';
+import 'package:task_manager_app/data/utils/urls.dart';
 import 'package:task_manager_app/ui/controllers/auth_controller.dart';
-import 'package:task_manager_app/ui/data/models/network_response.dart';
-import 'package:task_manager_app/ui/data/services/network_caller.dart';
-import 'package:task_manager_app/ui/data/utils/urls.dart';
 import 'package:task_manager_app/ui/screens/forgot_password_email_screen.dart';
 import 'package:task_manager_app/ui/screens/main_bottom_nav_bar_screen.dart';
 import 'package:task_manager_app/ui/screens/sign_up_screen.dart';

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import 'package:task_manager_app/ui/data/models/network_response.dart';
+import 'package:task_manager_app/data/models/network_response.dart';
 
 class NetworkCaller {
   static Future<NetworkResponse> getRequest({required String url}) async {
