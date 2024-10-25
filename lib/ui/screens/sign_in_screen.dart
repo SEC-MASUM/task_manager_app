@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager_app/ui/controllers/auth_controller.dart';
 import 'package:task_manager_app/ui/data/models/network_response.dart';
 import 'package:task_manager_app/ui/data/services/network_caller.dart';
 import 'package:task_manager_app/ui/data/utils/urls.dart';
@@ -163,6 +164,7 @@ class _SignInScreenState extends State<SignInScreen> {
       _inProgress = false;
     });
     if (response.isSuccess) {
+      await AuthController.saveAccessToken(response.responseData["token"]);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
