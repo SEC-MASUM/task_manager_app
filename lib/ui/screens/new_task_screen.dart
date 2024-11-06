@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_app/data/models/network_response.dart';
+import 'package:task_manager_app/data/models/task_list_model.dart';
+import 'package:task_manager_app/data/models/task_model.dart';
+import 'package:task_manager_app/data/services/network_caller.dart';
+import 'package:task_manager_app/data/utils/urls.dart';
 import 'package:task_manager_app/ui/screens/add_new_task_screen.dart';
+import 'package:task_manager_app/ui/widgets/centered_circular_progress_indicator.dart';
+import 'package:task_manager_app/ui/widgets/snack_bar_message.dart';
 import 'package:task_manager_app/ui/widgets/task_card.dart';
 import 'package:task_manager_app/ui/widgets/task_summary_card.dart';
 
@@ -11,6 +18,15 @@ class NewTaskScreen extends StatefulWidget {
 }
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
+  bool _getNewTaskListInProgress = false;
+  List<TaskModel> _newTaskList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getNewTaskList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,14 +34,20 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         children: [
           _buildSummarySection(),
           Expanded(
-            child: ListView.separated(
-                itemBuilder: (context, index) {
-                  return const TaskCard();
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox(height: 8);
-                },
-                itemCount: 10),
+            child: Visibility(
+              visible: !_getNewTaskListInProgress,
+              replacement: const CenteredCircularProgressIndicator(),
+              child: ListView.separated(
+                  itemBuilder: (context, index) {
+                    return TaskCard(
+                      taskModel: _newTaskList[index],
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(height: 8);
+                  },
+                  itemCount: _newTaskList.length),
+            ),
           ),
         ],
       ),
@@ -72,5 +94,25 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         builder: (context) => const AddNewTaskScreen(),
       ),
     );
+  }
+
+  Future<void> _getNewTaskList() async {
+    _newTaskList.clear();
+    setState(() {
+      _getNewTaskListInProgress = true;
+    });
+    final NetworkResponse response =
+        await NetworkCaller.getRequest(url: Urls.newTaskList);
+    if (response.isSuccess) {
+      final TaskListModel taskListModel =
+          TaskListModel.fromJson(response.responseData);
+
+      setState(() {
+        _newTaskList = taskListModel.taskList ?? [];
+        _getNewTaskListInProgress = false;
+      });
+    } else {
+      showSnackBarMessage(context, response.errorMessage, true);
+    }
   }
 }
