@@ -30,26 +30,31 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          _buildSummarySection(),
-          Expanded(
-            child: Visibility(
-              visible: !_getNewTaskListInProgress,
-              replacement: const CenteredCircularProgressIndicator(),
-              child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    return TaskCard(
-                      taskModel: _newTaskList[index],
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: 8);
-                  },
-                  itemCount: _newTaskList.length),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          _getNewTaskList();
+        },
+        child: Column(
+          children: [
+            _buildSummarySection(),
+            Expanded(
+              child: Visibility(
+                visible: !_getNewTaskListInProgress,
+                replacement: const CenteredCircularProgressIndicator(),
+                child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      return TaskCard(
+                        taskModel: _newTaskList[index],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(height: 8);
+                    },
+                    itemCount: _newTaskList.length),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _onTapAddFAB,
@@ -87,13 +92,16 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     );
   }
 
-  void _onTapAddFAB() {
-    Navigator.push(
+  Future<void> _onTapAddFAB() async {
+    final bool? shouldRefresh = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const AddNewTaskScreen(),
       ),
     );
+    if (shouldRefresh == true) {
+      _getNewTaskList();
+    }
   }
 
   Future<void> _getNewTaskList() async {
