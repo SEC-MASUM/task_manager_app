@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_app/data/models/network_response.dart';
+import 'package:task_manager_app/data/models/task_list_model.dart';
+import 'package:task_manager_app/data/models/task_model.dart';
+import 'package:task_manager_app/data/services/network_caller.dart';
+import 'package:task_manager_app/data/utils/urls.dart';
+import 'package:task_manager_app/ui/widgets/centered_circular_progress_indicator.dart';
+import 'package:task_manager_app/ui/widgets/snack_bar_message.dart';
 import 'package:task_manager_app/ui/widgets/task_card.dart';
 
 class CompletedTaskScreen extends StatefulWidget {
@@ -9,17 +16,56 @@ class CompletedTaskScreen extends StatefulWidget {
 }
 
 class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
+  bool _getCompletedTaskListInProgress = false;
+  List<TaskModel> _completedTaskList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getCompletedTaskList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        //TODO
-        // return const TaskCard();
-      },
-      separatorBuilder: (context, index) {
-        return const SizedBox(height: 8);
-      },
+    return Visibility(
+      visible: !_getCompletedTaskListInProgress,
+      replacement: const CenteredCircularProgressIndicator(),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          _getCompletedTaskList();
+        },
+        child: ListView.separated(
+          itemCount: _completedTaskList.length,
+          itemBuilder: (context, index) {
+            return TaskCard(
+              taskModel: _completedTaskList[index],
+            );
+          },
+          separatorBuilder: (context, index) {
+            return const SizedBox(height: 8);
+          },
+        ),
+      ),
     );
+  }
+
+  Future<void> _getCompletedTaskList() async {
+    _completedTaskList.clear();
+    setState(() {
+      _getCompletedTaskListInProgress = true;
+    });
+    final NetworkResponse response =
+        await NetworkCaller.getRequest(url: Urls.completedTaskList);
+    if (response.isSuccess) {
+      final TaskListModel taskListModel =
+          TaskListModel.fromJson(response.responseData);
+
+      setState(() {
+        _completedTaskList = taskListModel.taskList ?? [];
+        _getCompletedTaskListInProgress = false;
+      });
+    } else {
+      showSnackBarMessage(context, response.errorMessage, true);
+    }
   }
 }
